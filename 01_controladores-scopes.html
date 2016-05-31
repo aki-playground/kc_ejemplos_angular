@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ejemplo de Controladores y Scopes</title>
+    <script src="node_modules/angular/angular.js"></script>
+</head>
+<body ng-app="test">
+    <!-- Vista -->
+    <!-- Asociar ctrl a view -->
+    <div ng-controller="miPrimerControlador">
+        <!-- Mensaje -->
+        <p>{{ mensaje }}</p>
+        <!-- Los métodos ng-loQueSea sustituyen a su omónimos en html. p.ej:
+            ng-click == onClick -->
+        <button ng-click="saludar()">Saludar</button>
+        <p>{{ otroMensaje }}</p><!-- No se puede acceder a otroMensaje porque no está asignado al $scope-->
+    </div>
+    <script>
+        // Crear un módulo nuevo llamado "test"
+        angular.module("test", []);
+
+        // Controlador
+        angular
+            .module("test")
+            .controller("miPrimerControlador", function($scope){
+                $scope.mensaje = "Soy un mensaje en un controlador";
+                $scope.saludar = function(){
+                    alert("Saludo _(_ _)_ ");
+                }
+
+                var otroMensaje = "Otro Mensaje"; // Ésto no es accesible desde $scope y por tanto en el view
+            });
+    </script>
+</body>
+</html>
