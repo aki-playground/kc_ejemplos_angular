@@ -17,21 +17,6 @@
         <p>{{ otroMensaje }}</p><!-- No se puede acceder a otroMensaje porque no está asignado al $scope-->
     </div>
 
-
-    <!-- EJEMPLO EVENTOS -->
-    <div ng-controller="controladorPadre">
-        <p>Padre</p>
-        <!-- Botón para enviar evento a Ctrl Hijo -->
-        <button ng-click="notificarHijo()">Notificar Hijo</button>
-        <div ng-controller="controladorHijo">
-            <p>Hijo</p>
-            <!-- Botón para enviar evento al Ctrl Padre -->
-            <button ng-click="notificarPadre()">Notificar Padre</button>
-        </div>
-    </div>
-
-
-
     <!-- JS -->
     <script>
         // Crear un módulo nuevo llamado "test"
@@ -52,33 +37,6 @@
             });
 
 
-        /*
-        EJEMPLO DE EVENTOS
-        */
-        angular
-            .module("test")
-            .controller("controladorPadre", function($scope) {
-                $scope.notificarHijo = function () {
-                    $scope.$broadcast("EventoDesdePadre", "Soy evento enviado con $broadcast dese padre");
-                }
-
-                $scope.$on("EventoDesdeHijo", function(evt, msj) {
-                    alert("CtrlPadre ha recibido el sighiente mensaje:\n" + msj);
-                })
-            })
-
-        angular
-            .module("test")
-            .controller("controladorHijo", function($scope) {
-                $scope.notificarPadre = function () {
-                    $scope.$emit("EventoDesdeHijo", "Soy evento enviado con $emit desde hijo")
-                }
-
-                $scope.$on("EventoDesdePadre", function(evt, msj) {
-                    alert("CtrlHijo ha recibido el sighiente mensaje:\n" + msj)
-                })
-                
-            })
     </script>
 
 </body>
