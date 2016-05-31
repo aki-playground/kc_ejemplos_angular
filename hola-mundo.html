@@ -6,9 +6,11 @@
     <script src="node_modules/angular/angular.js"></script>
 </head>
 <body ng-app>
-    <input type="text" ng-model="nombre" />
+    <span>Escribe algo</span><input type="text" ng-model="nombre" />
+    <h3>Ejemplo de binding con {{}}</h3>
     <p>Hola {{ nombre }}, keep coding!!!</p>
     <!-- La doble llave = ngBind -->
+    <h3>Ejemplo de binding con ngBind</h3>
     <p>Code code code code..ánimo <span ng-bind="nombre"></span></p>
 </body>
 </html>
