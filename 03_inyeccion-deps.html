@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ejemplo de Inyección de Dependencias</title>
+    <script src="node_modules/angular/angular.js"></script>
+</head>
+<body ng-app="test">
+    <h1>Ejemplo de Inyección de Dependencias</h1>
+
+    <!-- Vistra Controlador1 -->
+    <div ng-controller="Controlador1">
+        <h2>Forma 2 de injección deps</h2>
+        <ul>
+            <li ng-repeat="mensaje in mensajes">
+                {{ mensaje }}
+            </li>
+        </ul>
+    </div>
+
+    <div ng-controller="Controlador2">
+        <h2>Inyección con $inject</h2>
+        <ul>
+            <li ng-repeat="mensaje in mensajes">
+                {{ mensaje }}
+            </li>
+        </ul>
+    </div>
+
+
+    <div ng-controller="Controlador3">
+        <h2>Injección con función</h2>
+        <ul>
+            <li ng-repeat="mensaje in mensajes">
+                {{ mensaje }}
+            </li>
+        </ul>
+    </div>
+    
+    <script>
+        angular
+            .module("test", []);
+
+        angular
+            .module("test")
+            .service("ServicioMensajes", function () {
+                this.dameMensajes = function() {
+                    return [
+                        "Hi KeepCoders",
+                        "Keep Coding KeepCoders"
+                    ]
+                }
+            });
+
+        // FORMA 1: Array
+        angular
+            .module("test")
+            .controller("Controlador1", 
+                        ["$scope", "ServicioMensajes", 
+                        function ($scope, ServicioMensajes){
+                            $scope.mensajes = ServicioMensajes.dameMensajes();
+                        }])
+
+
+        // FORMA 2: $inject
+        var controlador2 = function($scope, ServicioMensajes) {
+            $scope.mensajes = ServicioMensajes.dameMensajes();
+        }
+        controlador2.$inject= ["$scope", "ServicioMensajes"];
+        angular.module("test").controller("Controlador2", controlador2);
+
+        //Minificado --> funciona
+        /*var controlador2=function(o,e){o.mensajes=e.dameMensajes()};controlador2.$inject=["$scope","ServicioMensajes"],angular.module("test").controller("Controlador2",controlador2);*/
+        
+
+
+
+        // FORMA 3 : función
+        angular
+            .module("test")
+            .controller("Controlador3", function ($scope, ServicioMensajes) {
+                 $scope.mensajes = ServicioMensajes.dameMensajes();
+            })
+
+            //Esta forma no es segura para minificación --> Falla:
+            //angular.module("test").controller("Controlador3",function(e,n){e.mensajes=n.dameMensajes()});
+    </script>
+</body>
+</html>
