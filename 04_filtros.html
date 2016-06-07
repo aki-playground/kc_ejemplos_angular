@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ejemplo de filtros</title>
+    <script src="node_modules/angular/angular.js"></script>
+</head>
+<body ng-app="test">
+    <div ng-controller="filtros">
+        <h1>Ejemplos</h1>
+        <h2>Filtro currency:</h2>
+        <span>{{ precio | currency }}</span>
+        
+        <h2>Filtro date: </h2>
+        <span>{{ ahora | date }}</span>
+
+        <h2>Filtro texto: </h2>
+        <span>{{ textoGuay | uppercase }}</span>
+
+        <h2>Filtro desde controller: </h2>
+        <span>{{ textoEnMinuscula | uppercase }}</span>
+        <span>{{ textoEnMayuscula | uppercase }}</span>        
+
+        <h2>Filtro desde controller: </h2>
+        <span>{{ textoPropio | LetraCapital}}</span>
+    </div>
+    <script>
+        angular
+            .module("test", []);
+        angular
+            .module("test")
+            .controller("filtros", filtros);
+            filtros.$inject = ['$scope', '$filter'];
+            function filtros ($scope, $filter) {
+                $scope.precio = 23.89;
+                $scope.ahora = new Date();
+                $scope.textoGuay = "texto pirulo q mola a un garrulo";
+                $scope.textoEnMinuscula = $filter("lowercase")("Hola QuE aSe");
+                $scope.textoEnMayuscula = $filter("uppercase")("Hola QuE aSe");
+                $scope.textoPropio = "heloooouuu world"
+            }
+
+        angular
+            .module("test")
+            .filter("LetraCapital", function  () {
+                return function (text) {
+                    return text[0].toUpperCase() + text.slice(1);
+                }
+            })
+    </script>
+</body>
+</html>
