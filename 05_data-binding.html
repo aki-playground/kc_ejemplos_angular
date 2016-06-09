@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ejemplos de Databinding</title>
+    <script src="node_modules/angular/angular.js"></script>
+</head>
+<body ng-app="test">
+    <div ng-controller="EnlaceDatos">
+        <h1>Ejemplos de Data-Binding</h1>
+        <h2>Two Way databinding</h2>
+        <input type="text" ng-model="textoEnlazadoEnDobleSentido">
+        <p>{{ textoEnlazadoEnDobleSentido}}</p>
+
+        <h2>Two Way databinding con update</h2>
+        <input type="text" 
+                ng-model="textoEnlazadoEnDobleSentidoConUpdate"
+                ng-model-options="{ updateOn : 'blur' }">
+        <p><small>Quitar foco del input para actualizar</small></p>
+        <p>{{ textoEnlazadoEnDobleSentidoConUpdate}}</p>
+
+
+        <h2>Two Way databinding con debounce</h2>
+        <input type="text" 
+                ng-model="textoEnlazadoEnDobleSentidoConDebounce"
+                ng-model-options="{ debounce : 1000 }">
+        <p><small>El texto se actualiza cada 1000ms</small></p>
+        <p>{{ textoEnlazadoEnDobleSentidoConDebounce}}</p>
+
+
+        <h2>Two Way databinding One time binding</h2>
+        <input type="text" ng-model="textoEnlazadoOneTimeBinding">
+        <p><small>El texto se actualiza en la carga. Cambios en el input no se refleja en vista pero sí en modelo</small></p>
+        <p>{{ ::textoEnlazadoOneTimeBinding}}</p>
+        <button ng-click="mostrarEnConsola()">Ver valor del modelo (será igual al input)</button>
+
+    </div>
+    <script>
+        angular
+            .module("test", []);
+
+
+        angular
+            .module("test")
+            .controller("EnlaceDatos", function ($scope) {
+                $scope.textoEnlazadoEnDobleSentido = "Texto enlazado en doble sentido";
+                $scope.textoEnlazadoEnDobleSentidoConUpdate = "Texto enlazado en doble sentido con update";
+                $scope.textoEnlazadoEnDobleSentidoConDebounce = "Texto enlazado en doble sentido con debounce";
+                $scope.textoEnlazadoOneTimeBinding = "Texto enlazad de una sola vez al principio"
+
+                $scope.mostrarEnConsola = function ( ) {
+                    console.log('$scope.textoEnlazadoOneTimeBinding', $scope.textoEnlazadoOneTimeBinding);
+                }
+            })
+
+    </script>
+</body>
+</html>
