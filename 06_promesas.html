@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ejemplos de promesas</title>
+    <script src="node_modules/angular/angular.js"></script>
+</head>
+<body ng-app="test">
+<div >
+    <h1>Ejemplo de promesas</h1>
+    <div ng-controller="EjemploPromesas">
+        <button ng-click="getPromise(true)">Promesa que se resuelve positivamente</button>
+        <button ng-click="getPromise(false)">Promesa que resuelve negativamente</button>
+        <button ng-click="getPosition()">Geolocalización como promesa</button>
+        <p >{{ position }}</p>
+
+        <button ng-click="conWhen()">Obtener texto normal como promesa</button>
+        <p>{{ textoConWhen }}</p>
+
+    </div>
+</div>
+    
+    <script>
+        angular
+            .module('test', [])
+
+        angular
+            .module('test')
+            .service('Promesas', function ($q) {
+                this.mensaje = function (err) {
+                    // Crear el Deferred
+                    var deferred = $q.defer()
+                    setTimeout(function () {
+                        // resolvemos la promesa
+                        if (err) {
+                            deferred.resolve('Promise Resolved!')
+                        } else {
+                            deferred.reject('Promise Rejected!')
+                        }
+                    }, 3000)
+                    return deferred.promise
+                }
+
+                this.getPosition = function () {
+                    var deferred = $q.defer()
+
+                    navigator.geolocation.getCurrentPosition(function (pos) {
+                        deferred.resolve(pos.coords)
+                    },
+                    function (err) {
+                        deferred.reject(err)
+                    })
+                    return deferred.promise
+                }
+
+
+                this.conWhen = function () {
+
+                    // devolvemos un valor normal com promesa
+                    return $q.when("Texto normal como promesa con $q.when")
+                }
+            })
+
+        angular
+            .module('test')
+            .controller('EjemploPromesas', function ($scope, $filter, Promesas) {
+                $scope.position = "-"
+                $scope.textoConWhen = "-"
+                // then(function(valor){}) obtiene la resolución de la promesa
+                $scope.getPromise = function (err) { 
+                    Promesas.mensaje(err)
+                        .then(function (value) {
+                            alert(value)
+                        })
+                        .catch(function (error) { // si la promesa devuelve error
+                            alert(error)
+                        })
+                }
+
+                $scope.getPosition = function () { 
+                    Promesas.getPosition()
+                        .then(function (value) {
+                            console.log(value)
+                            $scope.position = value.latitude + ' ' + value.longitude
+                            
+                        })
+                        .catch(function (error) { // si la promesa devuelve error
+                            console.error("Error al obtener posición", error)
+                            $scope.position = error
+                        })
+                }
+
+                $scope.conWhen = function () {
+                    Promesas.conWhen()
+                        .then(function (value) {
+                            $scope.textoConWhen = value
+                        })
+                }
+
+
+            })
+    </script>
+</body>
+</html>
